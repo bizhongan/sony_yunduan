@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import Image from 'next/image'
 import styles from './PhotoShowcase.module.css'
 
@@ -13,6 +13,21 @@ export default function PhotoShowcase({ photos }: { photos: Photo[] }) {
     const [currentIndex, setCurrentIndex] = useState(() => 0)
     const [mounted, setMounted] = useState(false)
     const [imageLoading, setImageLoading] = useState(true)
+    const [preloadedImages, setPreloadedImages] = useState<Set<string>>(new Set())
+
+    // 预加载下一张图片
+    const preloadNextImage = useCallback((index: number) => {
+        if (typeof window === 'undefined') return; // 确保在浏览器环境中
+
+        const nextIndex = (index + 1) % photos.length
+        const nextSrc = photos[nextIndex].src
+
+        if (!preloadedImages.has(nextSrc)) {
+            const img = new window.Image()  // 使用 window.Image
+            img.src = nextSrc
+            setPreloadedImages(prev => new Set(prev).add(nextSrc))
+        }
+    }, [photos, preloadedImages])
 
     useEffect(() => {
         setMounted(true)
@@ -20,22 +35,46 @@ export default function PhotoShowcase({ photos }: { photos: Photo[] }) {
 
     useEffect(() => {
         if (!mounted) return
+
+        // 预加载下一张图片
+        preloadNextImage(currentIndex)
+
         const timer = setInterval(() => {
-            setCurrentIndex((prev) => (prev + 1) % photos.length)
-        }, 5000)
-        return () => clearInterval(timer)
-    }, [photos.length, mounted])
+            setCurrentIndex(prev => {
+                const nextIndex = (prev + 1) % photos.length
+                preloadNextImage(nextIndex)
+                return nextIndex
+            })
+        }, 6000)  // 改为 6 秒
+
+        // 清理定时器
+        return () => {
+            clearInterval(timer)
+        }
+    }, [currentIndex, photos.length, mounted, preloadNextImage])
+
+    const handleImageLoad = useCallback(() => {
+        setImageLoading(false)
+        // 当前图片加载完成后预加载下一张
+        preloadNextImage(currentIndex)
+    }, [currentIndex, preloadNextImage])
 
     if (!mounted) return null
 
     const handlePrev = () => {
         setImageLoading(true)
-        setCurrentIndex((prev) => (prev - 1 + photos.length) % photos.length)
+        const newIndex = (currentIndex - 1 + photos.length) % photos.length
+        setCurrentIndex(newIndex)
+        // 预加载上一张的上一张
+        preloadNextImage((newIndex - 1 + photos.length) % photos.length)
     }
 
     const handleNext = () => {
         setImageLoading(true)
-        setCurrentIndex((prev) => (prev + 1) % photos.length)
+        const newIndex = (currentIndex + 1) % photos.length
+        setCurrentIndex(newIndex)
+        // 预加载下一张的下一张
+        preloadNextImage((newIndex + 1) % photos.length)
     }
 
     return (
@@ -58,7 +97,7 @@ export default function PhotoShowcase({ photos }: { photos: Photo[] }) {
                         priority={currentIndex === 0}
                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                         quality={85}
-                        onLoadingComplete={() => setImageLoading(false)}
+                        onLoadingComplete={handleImageLoad}
                         style={{
                             objectFit: 'contain',
                             opacity: imageLoading ? 0 : 1,

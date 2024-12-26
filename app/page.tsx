@@ -12,19 +12,19 @@ const inter = Inter({ subsets: ['latin'] })
 const PHOTO_DATA = {
   Spring: Array.from({ length: 13 }, (_, i) => ({
     id: i + 1,
-    src: `/photos/Spring/spring_${i + 1}.jpg`
+    src: `https://aweb-tlias-demon.oss-cn-hangzhou.aliyuncs.com/photos/Spring/spring_${i + 1}.jpg`
   })),
   Summer: Array.from({ length: 48 }, (_, i) => ({
     id: i + 14,
-    src: `/photos/Summer/summer_${i + 1}.jpg`
+    src: `https://aweb-tlias-demon.oss-cn-hangzhou.aliyuncs.com/photos/Summer/summer_${i + 1}.jpg`
   })),
   Autumn: Array.from({ length: 20 }, (_, i) => ({
     id: i + 62,
-    src: `/photos/Autumn/autumn_${i + 1}.jpg`
+    src: `https://aweb-tlias-demon.oss-cn-hangzhou.aliyuncs.com/photos/Autumn/autumn_${i + 1}.jpg`
   })),
   Winter: Array.from({ length: 23 }, (_, i) => ({
     id: i + 82,
-    src: `/photos/Winter/winter_${i + 1}.jpg`
+    src: `https://aweb-tlias-demon.oss-cn-hangzhou.aliyuncs.com/photos/Winter/winter_${i + 1}.jpg`
   }))
 }
 

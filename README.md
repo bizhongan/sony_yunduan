@@ -221,3 +221,117 @@ const featuredPhotos = getSelectedPhotos(8)  // 8 为展示数量
 - 注意版权问题
 
 需要更多帮助，请查看 [Issues](https://github.com/your-repo/issues)。
+
+## 阿里云 OSS 配置
+
+本项目使用阿里云 OSS 存储图片，以提高访问速度和性能。
+
+### 1. OSS 配置步骤
+
+1. 创建阿里云 OSS Bucket：
+   ```bash
+   - 登录阿里云控制台
+   - 创建 Bucket（例如：your-bucket-name）
+   - 选择区域（例如：oss-cn-hangzhou）
+   - 设置读写权限为"公共读"
+   ```
+
+2. 上传图片到 OSS：
+   - 在 Bucket 中创建 photos 目录
+   - 按季节创建子目录：Spring、Summer、Autumn、Winter
+   - 上传照片并按格式命名：
+     ```
+     photos/
+     ├── Spring/
+     │   ├── spring_1.jpg
+     │   ├── spring_2.jpg
+     │   └── ...
+     ├── Summer/
+     │   ├── summer_1.jpg
+     │   └── ...
+     └── ...
+     ```
+
+3. 配置文件类型：
+   ```bash
+   在 Bucket 基础设置中添加：
+   *.jpg -> image/jpeg
+   *.jpeg -> image/jpeg
+   *.png -> image/png
+   ```
+
+### 2. 替换为自己的图片
+
+1. 修改 `app/page.tsx` 中的 OSS 配置：
+   ```typescript
+   const PHOTO_DATA = {
+     Spring: Array.from({ length: 你的春季照片数量 }, (_, i) => ({
+       id: i + 1,
+       src: `https://你的bucket名称.oss-cn-地域.aliyuncs.com/photos/Spring/spring_${i + 1}.jpg`
+     })),
+     Summer: Array.from({ length: 你的夏季照片数量 }, (_, i) => ({
+       id: i + 14,
+       src: `https://你的bucket名称.oss-cn-地域.aliyuncs.com/photos/Summer/summer_${i + 1}.jpg`
+     })),
+     // ... 秋季和冬季照片配置
+   }
+   ```
+
+2. 修改 `next.config.js` 中的域名配置：
+   ```javascript
+   const nextConfig = {
+     images: {
+       remotePatterns: [
+         {
+           protocol: 'https',
+           hostname: '你的bucket名称.oss-cn-地域.aliyuncs.com',
+         },
+       ],
+     },
+   }
+   ```
+
+3. 修改背景图片（可选）：
+   在 `app/page.module.css` 中更新 hero 背景：
+   ```css
+   .hero {
+     background: linear-gradient(
+       rgba(0, 0, 0, 0.5),
+       rgba(0, 0, 0, 0.7)
+     ),
+     url('https://你的bucket名称.oss-cn-地域.aliyuncs.com/photos/Winter/winter_1.jpg') center/cover no-repeat fixed;
+   }
+   ```
+
+### 3. 图片要求
+
+- 最小宽度: 1200px
+- 最大宽度: 1920px
+- 推荐比例: 3:2 或 16:9
+- 格式: JPG 或 PNG
+- 单张大小: 建议不超过 500KB
+- 命名规则: 必须按照 season_number.jpg 格式
+
+### 4. 性能优化
+
+1. 图片压缩：
+   ```bash
+   # 安装依赖
+   npm install sharp
+
+   # 运行优化脚本
+   node scripts/optimizeImages.js
+   ```
+
+2. CDN 加速（可选）：
+   - 在阿里云 OSS 中开启 CDN 加速
+   - 配置 CDN 缓存规则
+   - 使用 CDN 域名替换 OSS 域名
+
+### 5. 注意事项
+
+- 确保所有图片都是公开可访问的
+- 保持图片命名规则一致
+- 建议使用相同尺寸的图片
+- 定期检查 OSS 存储费用
+- 建议开启图片处理服务
