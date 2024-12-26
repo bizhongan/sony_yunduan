@@ -1,0 +1,23 @@
+{
+  "css.validate": true,
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll": true
+  },
+  "javascript.validate.enable": true,
+  "typescript.validate.enable": true,
+  "html.validate.scripts": true,
+  "html.validate.styles": true,
+  "html.autoClosingTags": true,
+  "css.lint.validProperties": ["all"],
+  "css.lint.unknownAtRules": "ignore",
+  "liveServer.settings.CustomBrowser": "chrome",
+  "liveServer.settings.donotShowInfoMsg": true,
+  "liveServer.settings.NoBrowser": true,
+  "liveServer.settings.ignoreFiles": [
+    ".vscode/**",
+    "**/*.scss",
+    "**/*.sass",
+    "**/*.ts"
+  ]
+} 

@@ -1,0 +1,77 @@
+.musicPlayer {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(10px);
+  padding: 0.5rem 1rem;
+  border-radius: 2rem;
+  z-index: 100;
+  transition: all 0.3s ease;
+}
+
+.playButton {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  cursor: pointer;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.playButton:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.1);
+}
+
+.volumeControl {
+  width: 100px;
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+.musicPlayer:hover .volumeControl {
+  opacity: 1;
+  width: 100px;
+}
+
+.volumeSlider {
+  width: 100%;
+  height: 4px;
+  -webkit-appearance: none;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  outline: none;
+}
+
+.volumeSlider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 12px;
+  height: 12px;
+  background: white;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+/* 亮色主题样式 */
+[data-theme='light'] .musicPlayer {
+  background: rgba(52, 152, 219, 0.2);
+}
+
+[data-theme='light'] .playButton {
+  background: rgba(52, 152, 219, 0.3);
+  color: #2c3e50;
+}
+
+[data-theme='light'] .playButton:hover {
+  background: rgba(52, 152, 219, 0.4);
+} 

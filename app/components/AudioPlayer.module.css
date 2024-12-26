@@ -1,0 +1,53 @@
+.musicButton {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.95);
+    border: 3px solid rgba(52, 152, 219, 0.3);
+    color: #3498db;
+    font-size: 28px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    z-index: 1000;
+    box-shadow: 0 4px 15px rgba(52, 152, 219, 0.2);
+}
+
+.musicButton:hover {
+    transform: scale(1.15);
+    background: white;
+    border-color: #3498db;
+    box-shadow: 0 6px 20px rgba(52, 152, 219, 0.3);
+}
+
+/* 播放状态样式 */
+.musicButton[data-playing="true"] {
+    background: #3498db;
+    color: white;
+    border-color: white;
+    animation: pulse 2s infinite;
+}
+
+.musicButton[data-playing="true"]:hover {
+    background: #2980b9;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 4px 15px rgba(52, 152, 219, 0.2);
+    }
+    50% {
+        transform: scale(1.05);
+        box-shadow: 0 4px 20px rgba(52, 152, 219, 0.4);
+    }
+    100% {
+        transform: scale(1);
+        box-shadow: 0 4px 15px rgba(52, 152, 219, 0.2);
+    }
+} 
